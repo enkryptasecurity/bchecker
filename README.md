@@ -7,6 +7,6 @@ WP hash recovery requires installed WordPress Core. <br><br>
 ![Capturar](https://github.com/enkryptasecurity/bchecker/assets/168931742/a24c2f35-bcb4-4e3b-9f90-29274edf4bc5)<br><br>
 ![tempsnip](https://github.com/enkryptasecurity/bchecker/assets/168931742/d3a36197-1712-4916-a5c6-35e4f92bb406)
 # Cracking results
-After Bchecker finishing cracking, a txt file will be created with cracked hash information.<br>
+After BChecker finishing cracking, a txt file will be created with cracked hash information.<br>
 The file can be bchecker_result.txt or bchecker_wp_result.txt and it will be located in the path where Shell is running.
 
