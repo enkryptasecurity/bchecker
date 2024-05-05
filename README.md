@@ -15,4 +15,6 @@ Ex: If user select the number of 10, BChecker will try to crack 10 hashes and if
 # Cracking results
 After BChecker finishing cracking, a txt file will be created with cracked hash information.<br>
 The file can be bchecker_result.txt or bchecker_wp_result.txt and it will be located in the path where Shell is running.
+# DISCLAIMER
+This tool is for professional and educational purposes only. And it's not meant to be used against targets without permission.
 
