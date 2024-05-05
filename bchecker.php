@@ -71,6 +71,17 @@ switch($option){
 		if(!in_array($crack_opt, $options)){
 			die('Invalid option. Aborting...');
 		}
+		echo "Set Index? [y/n] "; $index_input = fopen("php://stdin","r"); $index_opt = trim(fgets($index_input));
+		if($index_opt === 'y'){
+			echo "Index? "; $index_n_input = fopen("php://stdin","r"); $index_n = trim(fgets($index_n_input));
+			if(empty($index_n)){
+				die("Invalid Index! \n Aborting... \n");
+			}
+			if(!is_numeric($index_n)){
+				die("Index is not a number! \n Aborting... \n");
+			}
+			$set_index = true;
+		}
 		echo "Starting... \n";
 		$strings = file_get_contents($wordlist);
 		$unique_string = explode("\n",$strings);
@@ -79,6 +90,12 @@ switch($option){
 		$count_not_found = 0;
 		foreach($unique_string as $string_atp){
 			foreach($unique_hash as $hash_atp){
+				if(isset($set_index)){
+					if($count < $index_n){
+						$count++;
+						continue; // skips if count is lower than last index
+					}
+				}
 				if(password_verify(trim($string_atp), trim($hash_atp))){
 					$count++;
 					echo "".$count." Success! \n";
@@ -203,17 +220,54 @@ switch($option){
 		if(!in_array($crack_opt, $options)){
 			die('Invalid option. Aborting...');
 		}
+		echo "Set Index? [y/n] "; $index_input = fopen("php://stdin","r"); $index_opt = trim(fgets($index_input));
+		if($index_opt === 'y'){
+			echo "Index? "; $index_n_input = fopen("php://stdin","r"); $index_n = trim(fgets($index_n_input));
+			if(empty($index_n)){
+				die("Invalid Index! \n Aborting... \n");
+			}
+			if(!is_numeric($index_n)){
+				die("Index is not a number! \n Aborting... \n");
+			}
+			$set_index = true;
+		}
+		if($crack_opt === '1'){
+			echo "Want to set limits? [y/n]: "; $limit_input = fopen("php://stdin","r"); $limit = trim(fgets($limit_input));
+			if($limit === 'y'){
+				echo "How much?: "; $limit_count_input = fopen("php://stdin","r"); $limit_count = trim(fgets($limit_count_input));
+				if(empty($limit_count)){
+					die("Limit is empty! \n Aborting...");
+				}else{
+					if(!is_numeric($limit_count)){
+						die("Input is not a number! \n Aborting...");
+					}else{
+						$is_limited = true;
+					}
+				} 
+			}
+		}
 		$count = 0;
 		$count_found = 0;
 		$count_not_found = 0;
 		foreach($unique_string as $string_atp){
 			foreach($unique_hash as $hash_atp){
+				if(isset($set_index)){
+					if($count < $index_n){
+						$count++;
+						continue; // skips if count is lower than last index
+					}
+				}
 				if(wp_check_password(trim($string_atp), trim($hash_atp))){
 					$count++;
 					echo "".$count." Success! \n";
 					$count_found++;
 					$found_hashes[] = "Password Matches! ".$hash_atp." = ".$string_atp." \n";
 					$job_success = true;
+					if(isset($is_limited)){
+						if($count_found >= $limit_count){
+							break 2; // ends loop after reaching limit
+						}
+					}
 					if($crack_opt === '2'){
 						break 2; // ends loop after cracking 1 hash
 					}
@@ -226,6 +280,9 @@ switch($option){
 		}
 		if(isset($job_success)){
 			echo "Cracking was finished: ".$count." hashes were checked. ".$count_found." found, ".$count_not_found." not found. \n";
+			if(isset($is_limited)){
+				echo "BChecker reached limit of ".$limit_count." hashes cracked. \n";
+			}
 			$i = 0;
 			foreach($found_hashes as $success_recover){
 				if($i === 0){
